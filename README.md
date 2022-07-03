@@ -1,4 +1,4 @@
-# procesamiento-batch-de-cheques
+# Procesamiento Batch de cheques
 
 Hi there 👋 Somos el **Grupo 3** (Comisión 4)
 
