@@ -44,7 +44,7 @@ class Usuario(Banco,Cheque):
         self.numeroCuenta=numeroCuenta
         Usuario.usuarios.append(self)
     def __repr__(self):
-        return f"{self.banco},{self.sucursal},{self.codigoBanco},{self.codigoSucursal},{self.nombre},{self.apellido},{self.dni},{self.fondos},{self.numeroCuenta}"
+        return f"\nBanco:  {self.banco},\nSucursal:  {self.sucursal},\nCodigoBanco:  {self.codigoBanco},\nCodigoSucursal:  {self.codigoSucursal},\nNombre:  {self.nombre},\nApellido:  {self.apellido},\nDNI:  {self.dni},\nFondos: $ {self.fondos},\nN° de Cuenta:  {self.numeroCuenta}"
    
     def crearUsuarioConCSV():
         with open(r'Clientes.csv') as f:
@@ -63,12 +63,22 @@ class Usuario(Banco,Cheque):
                     Cheque(row[8],row[7],int(row[9]),row[10],row[11],row[15],row[14],row[13])
                 else:
                  print(f"Lo sentimos {row[0]},no posees saldo suficiente para librar este cheque")
-
-
-
-print(Cheque.cheques)
+    def buscarChequesPorUsuario():
+        dni=input('ingrese su numero de dni:\n----> ')
+        for i in Cheque.cheques:
+            if dni==i.dni:
+                print(f"Ingresaste los siguientes cheques: \n {i}")
+            else: 
+                print('Lo sentimos no poseemos cheques que concuerden con la información ingresada')
+    
+    def buscarDatosPorConsola():
+        dni=input('ingrese su numero de dni:\n----> ')
+        for i in Usuario.usuarios:
+           if (i.dni==dni):
+                print(f"{i}\n\n")
 
 
 Usuario.crearUsuarioConCSV()
 Usuario.crearChequeConCSV(Usuario.usuarios)
-
+# Usuario.buscarChequesPorUsuario()
+Usuario.buscarDatosPorConsola()
