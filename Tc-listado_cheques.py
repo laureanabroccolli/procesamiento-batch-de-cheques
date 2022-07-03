@@ -1,16 +1,26 @@
 
-from datetime import date, datetime
-from pickle import FALSE
+# Falta:
+#  agregar funcion para agregar Usuarios por consola
+#  agregar funcion para agregar cheques por consola
+#  Agregar funcion para buscar Usuarios y cheques por consola
 
+
+import csv
 class Cheque():
     cheques=[]
-    def __init__(self,emisor,monto,fecha=datetime().today()):
-        self.emisor=emisor
-        self.monto=monto
-        self.fecha=fecha
+    def __init__(self,numeroCuenta,cuentaDestino,valor,fechaEmision,fechaPago,tipo,estado,dni):
+        self.numeroCuenta=numeroCuenta
+        self.cuentaDestino=cuentaDestino
+        self.valor=valor
+        self.fechaEmision=fechaEmision
+        self.fechaPago=fechaPago,
+        self.tipo=tipo,
+        self.dni=dni
+        self.estado=estado
         Cheque.cheques.append(self)
     def __repr__(self):
-        return f"   --CHEQUE--: \n*Emisor: {self.emisor} \n*Monto: {self.monto} \n*Fecha de Emision: {self.fecha}"
+        return f"   --CHEQUE--: \n*Emisor: {self.numeroCuenta} \n*Monto: {self.valor} \n*Fecha de Emision: {self.fechaEmision} \n*Destinatario:{self.cuentaDestino} \n*Fecha de Emision:{self.fechaPago} \n*Estado:{self.estado}\n dni:{self.dni}\n"
+
 class Banco():
     bancos=[]
     def __init__(self,banco,sucursal,codigoBanco,codigoSucursal):
@@ -21,46 +31,44 @@ class Banco():
         Banco.bancos.append(self)
     def __repr__(self):
         return f"Banco:{self.banco}, Sucursal:{self.sucursal}, codigoBanco:{self.codigoBanco}, CodigoSucursal:{self.codigoSucursal}\n"
-class Usuario(Banco):
+class Usuario(Banco,Cheque):
     usuarios=[]
 
-
-    def __init__(self,banco,sucursal,codigoBanco,codigoSucursal,nombre,apellido,dni,fondos,numeroCuenta,categoria):
+    def __init__(self,banco,sucursal,codigoBanco,codigoSucursal,nombre,apellido,dni,fondos,numeroCuenta):
         super().__init__(banco,sucursal,codigoBanco,codigoSucursal)
+        
         self.nombre=nombre
         self.apellido=apellido
         self.dni=dni
-        self.fondos=int(fondos)
-        self.categoria=categoria
+        self.fondos=fondos
         self.numeroCuenta=numeroCuenta
         Usuario.usuarios.append(self)
     def __repr__(self):
-        return f"{self.nombre}, {self.apellido},{self.banco},{self.sucursal},{self.dni}\n"
-    def buscarSucursal(self,banco):
-        for i in Usuario.usuarios:
-            if (i.banco==banco):
-                print(i.banco)
-            
-    def crearCheque(self,monto):
-        if monto<=self.fondos :
-            Cheque(self.nombre,monto,)          
-            
-        else:
-            print('Saldo Insuficiente')
+        return f"{self.banco},{self.sucursal},{self.codigoBanco},{self.codigoSucursal},{self.nombre},{self.apellido},{self.dni},{self.fondos},{self.numeroCuenta}"
+   
+    def crearUsuarioConCSV():
+        with open(r'Clientes.csv') as f:
+            reader = csv.reader(f)
+            next(reader)
+            for row in reader :
+                Usuario(row[3],row[4],row[5],row[6],row[0],row[1],row[13],int(row[12]),row[8])
 
-bbva=Banco('BBVA','Catalinas',11000,1)
-hsbc=Banco('HSBC','Bouchard',20010,2)
-santander=Banco('Santander','Vicente Lopez',49010,23)
-
-
-
-usuario1=Usuario(bbva.banco,bbva.sucursal,bbva.codigoBanco,bbva.codigoSucursal,'Tomás','Calabria',31415113,121211,1212121,'Gold')
-usuario2=Usuario(hsbc.banco,hsbc.sucursal,hsbc.codigoBanco,hsbc.codigoSucursal,'Juan','Calabria',415623141,31010,2000203,'Gold')
-usuario3=Usuario(santander.banco,santander.sucursal,santander.codigoBanco,santander.codigoSucursal,'Angela','Lerena',31049010,93000,3100020,'Standard')
+                Cheque(row[8],row[7],row[9],row[10],row[11],row[15],row[14],row[13])
+    def crearChequeConCSV(self):
+          with open(r'Clientes.csv') as f:
+            reader = csv.reader(f)
+            next(reader)
+            for row in reader :
+                if(row[12]<=row[9]):
+                    Cheque(row[8],row[7],int(row[9]),row[10],row[11],row[15],row[14],row[13])
+                else:
+                 print(f"Lo sentimos {row[0]},no posees saldo suficiente para librar este cheque")
 
 
-usuario1.crearCheque(400)
 
-usuario1.buscarSucursal('HSBC')
-for i in Cheque.cheques:
-    print(i)
+print(Cheque.cheques)
+
+
+Usuario.crearUsuarioConCSV()
+Usuario.crearChequeConCSV(Usuario.usuarios)
+
