@@ -2,9 +2,6 @@
 # Falta:
 #  agregar funcion para agregar Usuarios por consola
 #  agregar funcion para agregar cheques por consola
-#  Agregar funcion para buscar Usuarios y cheques por consola
-
-
 import csv
 class Cheque():
     cheques=[]
@@ -68,17 +65,15 @@ class Usuario(Banco,Cheque):
         for i in Cheque.cheques:
             if dni==i.dni:
                 print(f"Ingresaste los siguientes cheques: \n {i}")
-            else: 
-                print('Lo sentimos no poseemos cheques que concuerden con la información ingresada')
     
     def buscarDatosPorConsola():
         dni=input('ingrese su numero de dni:\n----> ')
         for i in Usuario.usuarios:
-           if (i.dni==dni):
-                print(f"{i}\n\n")
-
+         if (i.dni==dni):
+             print(f"{i}")
 
 Usuario.crearUsuarioConCSV()
 Usuario.crearChequeConCSV(Usuario.usuarios)
-# Usuario.buscarChequesPorUsuario()
+
 Usuario.buscarDatosPorConsola()
+# Usuario.buscarChequesPorUsuario()
