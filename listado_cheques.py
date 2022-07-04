@@ -1,4 +1,3 @@
-
 # Falta:
 #  agregar funcion para agregar Usuarios por consola
 #  agregar funcion para agregar cheques por consola
@@ -6,6 +5,18 @@
 
 
 import csv
+from Cheque import *
+cheques = list()
+
+with open('Clientes.csv') as f:
+  reader = csv.reader(f)
+  for row in reader:
+    nuevo_cheque = Cheque('??', row[6], row[7])
+    cheques.append(nuevo_cheque)
+    print("DNI: {0}, Tipo: {1}, Estado: {2}, FechaOrigen: {3}, FechaPago: {4}".format(row[8],row[10],row[9],row[6],row[7]))
+
+print(cheques)
+
 class Cheque():
     cheques=[]
     def __init__(self,numeroCuenta,cuentaDestino,valor,fechaEmision,fechaPago,tipo,estado,dni):
@@ -82,3 +93,4 @@ Usuario.crearUsuarioConCSV()
 Usuario.crearChequeConCSV(Usuario.usuarios)
 # Usuario.buscarChequesPorUsuario()
 Usuario.buscarDatosPorConsola()
+
