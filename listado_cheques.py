@@ -1,79 +1,107 @@
 
-# Falta:
-#  agregar funcion para agregar Usuarios por consola
-#  agregar funcion para agregar cheques por consola
 import csv
-class Cheque():
-    cheques=[]
-    def __init__(self,numeroCuenta,cuentaDestino,valor,fechaEmision,fechaPago,tipo,estado,dni):
-        self.numeroCuenta=numeroCuenta
-        self.cuentaDestino=cuentaDestino
-        self.valor=valor
-        self.fechaEmision=fechaEmision
-        self.fechaPago=fechaPago,
-        self.tipo=tipo,
-        self.dni=dni
-        self.estado=estado
-        Cheque.cheques.append(self)
-    def __repr__(self):
-        return f"   --CHEQUE--: \n*Emisor: {self.numeroCuenta} \n*Monto: {self.valor} \n*Fecha de Emision: {self.fechaEmision} \n*Destinatario:{self.cuentaDestino} \n*Fecha de Emision:{self.fechaPago} \n*Estado:{self.estado}\n dni:{self.dni}\n"
+import time
+import datetime
+file=input('INGRESE EL NOMBRE DEL ARCHIVO .CSV A PROCESAR : '.upper())
+data= open(f'{file}.csv','r') 
+csvReader=csv.DictReader(data)  
 
-class Banco():
-    bancos=[]
-    def __init__(self,banco,sucursal,codigoBanco,codigoSucursal):
-        self.banco=banco
-        self.sucursal=sucursal
-        self.codigoBanco=codigoBanco
-        self.codigoSucursal=codigoSucursal
-        Banco.bancos.append(self)
-    def __repr__(self):
-        return f"Banco:{self.banco}, Sucursal:{self.sucursal}, codigoBanco:{self.codigoBanco}, CodigoSucursal:{self.codigoSucursal}\n"
-class Usuario(Banco,Cheque):
-    usuarios=[]
 
-    def __init__(self,banco,sucursal,codigoBanco,codigoSucursal,nombre,apellido,dni,fondos,numeroCuenta):
-        super().__init__(banco,sucursal,codigoBanco,codigoSucursal)
-        
-        self.nombre=nombre
-        self.apellido=apellido
-        self.dni=dni
-        self.fondos=fondos
-        self.numeroCuenta=numeroCuenta
-        Usuario.usuarios.append(self)
-    def __repr__(self):
-        return f"\nBanco:  {self.banco},\nSucursal:  {self.sucursal},\nCodigoBanco:  {self.codigoBanco},\nCodigoSucursal:  {self.codigoSucursal},\nNombre:  {self.nombre},\nApellido:  {self.apellido},\nDNI:  {self.dni},\nFondos: $ {self.fondos},\nN° de Cuenta:  {self.numeroCuenta}"
-   
-    def crearUsuarioConCSV():
-        with open(r'Clientes.csv') as f:
-            reader = csv.reader(f)
-            next(reader)
-            for row in reader :
-                Usuario(row[3],row[4],row[5],row[6],row[0],row[1],row[13],int(row[12]),row[8])
 
-                Cheque(row[8],row[7],row[9],row[10],row[11],row[15],row[14],row[13])
-    def crearChequeConCSV(self):
-          with open(r'Clientes.csv') as f:
-            reader = csv.reader(f)
-            next(reader)
-            for row in reader :
-                if(row[12]<=row[9]):
-                    Cheque(row[8],row[7],int(row[9]),row[10],row[11],row[15],row[14],row[13])
-                else:
-                 print(f"Lo sentimos {row[0]},no posees saldo suficiente para librar este cheque")
-    def buscarChequesPorUsuario():
-        dni=input('ingrese su numero de dni:\n----> ')
-        for i in Cheque.cheques:
-            if dni==i.dni:
-                print(f"Ingresaste los siguientes cheques: \n {i}")
+def timeStamp(fecha): 
+ newFecha= time.mktime(datetime.datetime.strptime(fecha,"%d/%m/%Y").timetuple())
+ return newFecha
+def usa_switch(opcion):
+    def opcion1():
+     datoPorConsola=input('Ingrese su dni \n--- '.upper())
+     print('Sus cheques Aprobados son:')
+     for cheque in csvReader:
+        if cheque['DNI']==datoPorConsola and cheque['Estado']=='Aprobado':
+          print(f'''-------------------------------------------------------------------------------------------------
+            Cheque N°: {cheque["NroCheque"]}                          EMISOR: {cheque['Nombre']} {cheque['Apellido']} 
+
+            Fecha de Emision: {timeStamp(cheque["fechaEmision"])}         Fecha de Pago: {timeStamp(cheque["FechaPago"])} 
+
+            DNI: {cheque["DNI"]}     BANCO: {cheque['Banco']}       Sucursal: {cheque["CodigoSucursal"]}            Codigo: {cheque["CodigoBanco"]}
+
+            Cuenta de Origen: {cheque["NumeroCuentaOrigen"]}               Cuenta de Destino: {cheque["NumeroCuentaDestino"]}
+
+            Tipo de Cheque: {cheque["Tipo"]}         Estado del Cheque: {cheque["Estado"]}
+
+            Monto: ${cheque["Valor"]} 
+            --------------------------------------------------------------------------------------------------''')         
+          operacion=input('\nINGRESE LA OPERACION A REALIZAR:\n1)--- Exportar \n2)--- Salir\n--> '.upper())
+          if operacion=='1' or operacion=='EXPORTAR':
+            print('EXPORTADO')
+          elif operacion=='2' or operacion=='SALIR':
+            break
+    def opcion2():
+      datoPorConsola=input('Ingrese su dni \n--- '.upper())
+      print('Estos son sus cheques Rechazados:')
+      for cheque in csvReader:
+           if cheque['DNI']==datoPorConsola and cheque['Estado']=='Rechazado':
+            print(f'''-------------------------------------------------------------------------------------------------
+            Cheque N°: {cheque["NroCheque"]}                          EMISOR: {cheque['Nombre']} {cheque['Apellido']} 
+
+            Fecha de Emision: {timeStamp["fechaEmision"]}         Fecha de Pago: {timeStamp(cheque["FechaPago"])} 
+
+            DNI: {cheque["DNI"]}     BANCO: {cheque['Banco']}       Sucursal: {cheque["CodigoSucursal"]}            Codigo: {cheque["CodigoBanco"]}
+
+            Cuenta de Origen: {cheque["NumeroCuentaOrigen"]}               Cuenta de Destino: {cheque["NumeroCuentaDestino"]}
+
+            Tipo de Cheque: {cheque["Tipo"]}         Estado del Cheque: {cheque["Estado"]}
+
+            Monto: ${cheque["Valor"]} 
+            --------------------------------------------------------------------------------------------------''')    
+    def opcion3 ():
+      datoPorConsola=input('Ingrese su dni \n--- '.upper())
+      print('Estos son todos sus cheques:')
+      for cheque in csvReader:
+           if cheque['DNI']==datoPorConsola and cheque['Estado']:
+            print(f'''-------------------------------------------------------------------------------------------------
+ Cheque N°: {cheque["NroCheque"]}                          EMISOR: {cheque['Nombre']} {cheque['Apellido']} 
+ 
+ Fecha de Emision: {timeStamp["fechaEmision"]}         Fecha de Pago: {timeStamp(cheque["FechaPago"])} 
+
+ DNI: {cheque["DNI"]}     BANCO: {cheque['Banco']}       Sucursal: {cheque["CodigoSucursal"]}            Codigo: {cheque["CodigoBanco"]}
+
+ Cuenta de Origen: {cheque["NumeroCuentaOrigen"]}               Cuenta de Destino: {cheque["NumeroCuentaDestino"]}
+
+ Tipo de Cheque: {cheque["Tipo"]}         Estado del Cheque: {cheque["Estado"]}
+
+ Monto: ${cheque["Valor"]} 
+ --------------------------------------------------------------------------------------------------''')
+    def opcion4():
+        datoPorConsola=input('Ingrese su dni \n--- '.upper())
+        for cheque in csvReader:
+            if cheque['DNI']==datoPorConsola :
+               print(f'''-------------------------------------------------------------------------------------------------
+ Cheque N°: {cheque["NroCheque"]}                          EMISOR: {cheque['Nombre']} {cheque['Apellido']} 
+ 
+ Fecha de Emision: {timeStamp(cheque["fechaEmision"])}         Fecha de Pago: {timeStamp(cheque["FechaPago"])} 
+
+ DNI: {cheque["DNI"]}     BANCO: {cheque['Banco']}       Sucursal: {cheque["CodigoSucursal"]}            Codigo: {cheque["CodigoBanco"]}
+
+ Cuenta de Origen: {cheque["NumeroCuentaOrigen"]}               Cuenta de Destino: {cheque["NumeroCuentaDestino"]}
+
+ Tipo de Cheque: {cheque["Tipo"]}         Estado del Cheque: {cheque["Estado"]}
+
+ Monto: ${cheque["Valor"]} 
+ --------------------------------------------------------------------------------------------------''')
+    switcher = {
+        '1': opcion1,
+        '2': opcion2,
+        '3': opcion3,
+        '4': opcion4,
+    }
     
-    def buscarDatosPorConsola():
-        dni=input('ingrese su numero de dni:\n----> ')
-        for i in Usuario.usuarios:
-         if (i.dni==dni):
-             print(f"{i}")
+    func= switcher.get(opcion,lambda: "Lo sentimos la opción no es valida")
+   
+    print(func())    
+def procesarCheques():
+ operaciones=input('INGRESE LA OPERACION A REALIZAR:\n 1) --Ver Cheques Aprobados\n 2) ---Ver cheques rechazados\n 3) ---Ver todos los cheques\n 4) ---Exportar todos mis depositos\n--> '.upper())
+ usa_switch(operaciones)
+ 
 
-Usuario.crearUsuarioConCSV()
-Usuario.crearChequeConCSV(Usuario.usuarios)
+procesarCheques()
 
-Usuario.buscarDatosPorConsola()
-# Usuario.buscarChequesPorUsuario()
