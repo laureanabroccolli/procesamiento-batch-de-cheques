@@ -1,8 +1,8 @@
 
-
 import csv
 import time
 import datetime
+
 file=input('INGRESE EL NOMBRE DEL ARCHIVO .CSV A PROCESAR : '.upper())
 data= open(f'{file}.csv','r') 
 csvReader=csv.DictReader(data)  
@@ -89,18 +89,24 @@ def usa_switch(opcion):
 
  Monto: ${cheque["Valor"]} 
  --------------------------------------------------------------------------------------------------''')
+
+    def opcion5():
+      print('Gracias por elegirnos!')
+      exit()
+
     switcher = {
         '1': opcion1,
         '2': opcion2,
         '3': opcion3,
         '4': opcion4,
+        '5': opcion5
     }
     
     func= switcher.get(opcion,lambda: "Lo sentimos la opción no es valida")
    
     print(func())    
 def procesarCheques():
- operaciones=input('INGRESE LA OPERACION A REALIZAR:\n 1) --Ver Cheques Aprobados\n 2) ---Ver cheques rechazados\n 3) ---Ver todos los cheques\n 4) ---Exportar todos mis depositos\n--> '.upper())
+ operaciones=input('INGRESE LA OPERACION A REALIZAR:\n 1) --Ver Cheques Aprobados\n 2) ---Ver cheques rechazados\n 3) ---Ver todos los cheques\n 4) ---Exportar todos mis depositos\n 5) ---Salir\n--> '.upper())
  usa_switch(operaciones)
  
 
