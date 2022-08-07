@@ -19,7 +19,7 @@ def obtenerSalida():
 
 def obtenerTipo():
   tipo = NULL
-  while not tipo:
+  while (tipo != "EMITIDO" and tipo != "DEPOSITADO"):
     tipo = input("Ingrese el estado del cheque (EMITIDO o DEPOSITADO)".upper())  
   return tipo
 
@@ -63,7 +63,7 @@ def procesarCheques():
   obj_cheque = {}
   cheques = list()
   for cheque in csvReader:
-      if cheque["Tipo"].upper() ==tipo.upper() and cheque['DNI']==dni and (estado.upper() == cheque["Estado"].upper() or not estado):
+      if cheque["Tipo"].upper() ==tipo.upper() and cheque['DNI'].replace(".", "").replace(".", "")==dni and (estado.upper() == cheque["Estado"].upper() or not estado):
         obj_cheque["DNI"] = cheque["DNI"]
         obj_cheque["NroCheque"] = cheque["NroCheque"]
         obj_cheque["CodigoBanco"] = cheque["CodigoBanco"]
@@ -71,7 +71,7 @@ def procesarCheques():
         obj_cheque["Estado"] = cheque["Estado"]
         obj_cheque["CodigoSucursal"] = cheque["CodigoSucursal"]
         obj_cheque["NumeroCuentaOrigen"] = cheque["NumeroCuentaOrigen"]
-        obj_cheque["FechaOrigen"] = cheque["FechaOrigen"]
+        obj_cheque["FechaOrigen"] = cheque["fechaEmision"]
         obj_cheque["Valor"] = cheque["Valor"] 
         obj_cheque["NumeroCuentaDestino"] = cheque["NumeroCuentaDestino"]
         obj_cheque["FechaPago"] = cheque["FechaPago"]
