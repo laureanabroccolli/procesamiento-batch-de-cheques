@@ -13,22 +13,35 @@ def obtenerDni():
 def obtenerSalida():
   salida = ""
   while (salida != "PANTALLA" and salida != "CSV"):
-    salida = str(input("Ingrese una salida: PANTALLA o CSV:")).upper()
+    salida = str(input("Ingrese una salida: PANTALLA o CSV: \n")).upper()
   
   return salida
 
 def obtenerTipo():
   tipo = NULL
   while (tipo != "EMITIDO" and tipo != "DEPOSITADO"):
-    tipo = input("Ingrese el estado del cheque (EMITIDO o DEPOSITADO)".upper())  
+    tipo = input("Ingrese el estado del cheque (EMITIDO o DEPOSITADO): \n".upper())  
   return tipo
 
 def obtenerEstado():
-  estado = input("Ingrese el estado del cheque: Aprobado, Rechazado o Pendiente (Opcional).".upper())
+  estado = input("Ingrese el estado del cheque: Aprobado, Rechazado o Pendiente (Opcional). \n".upper())
   return estado
 
+def obtenerRangoFecha():
+  fecha = input("Ingrese el rango de fecha del cheque en siguiente formato: xx-xx-xxxx:yy-yy-yyyy (Opcional) \n")
+  return fecha
+
+def procesarRango(fechaInput):
+  if fechaInput:
+    fechas = str(fechaInput).split(sep=':')
+    fecha1 = datetime.strptime(fechas[0],"%d-%m-%Y")
+    fecha2 = datetime.strptime(fechas[1],"%d-%m-%Y")
+  
+    return fecha1, fecha2
+  else: return NULL, NULL
+    
 def timeStamp(fecha): 
-  newFecha = time.mktime(datetime.datetime.strptime(fecha,"%d/%m/%Y").timetuple())
+  newFecha = datetime.strptime(fecha,"%d/%m/%Y")
   return newFecha
   
 def procesarSalida(cheques, dni):
@@ -60,10 +73,15 @@ def procesarCheques():
   dni = obtenerDni()
   tipo = obtenerTipo()
   estado = obtenerEstado()
+  fecha = obtenerRangoFecha()
+
+  fecha1, fecha2 = procesarRango(fecha)
+  
   obj_cheque = {}
   cheques = list()
   for cheque in csvReader:
-      if cheque["Tipo"].upper() ==tipo.upper() and cheque['DNI'].replace(".", "").replace(".", "")==dni and (estado.upper() == cheque["Estado"].upper() or not estado):
+      fechaEmision = timeStamp(cheque["fechaEmision"])
+      if cheque["Tipo"].upper() ==tipo.upper() and cheque['DNI'].replace(".", "").replace(".", "")==dni and (estado.upper() == cheque["Estado"].upper() or not estado) and ((not fecha1 and not fecha2) or (fechaEmision > fecha1 and fechaEmision <= fecha2)):
         obj_cheque["DNI"] = cheque["DNI"]
         obj_cheque["NroCheque"] = cheque["NroCheque"]
         obj_cheque["CodigoBanco"] = cheque["CodigoBanco"]
